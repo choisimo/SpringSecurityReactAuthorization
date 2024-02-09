@@ -1,7 +1,7 @@
 package com.example.springSecurityJWT.controller;
 
 import com.example.springSecurityJWT.configuration.jwtUtils;
-import com.example.springSecurityJWT.domain.AuthenticationRequest;
+import com.example.springSecurityJWT.dto.AuthenticationRequest;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 
 @RestController
@@ -22,7 +21,7 @@ public class loginController {
 
     private final jwtUtils jwtUtils;
 
-    @PostMapping("/login")
+    @PostMapping("login")
     public ResponseEntity<?> login(@RequestBody AuthenticationRequest request) {
 
         String username = request.getUsername();

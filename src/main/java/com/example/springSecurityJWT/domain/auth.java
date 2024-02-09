@@ -16,6 +16,9 @@ public class auth {
     @Column(length = 10)
     private String auth;
 
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private member member;
 
     @Builder
     public auth(long id, String memberName, String auth) {

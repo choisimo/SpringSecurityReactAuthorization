@@ -1,9 +1,7 @@
 package com.example.springSecurityJWT.controller;
 
-import com.example.springSecurityJWT.domain.AuthenticationRequest;
+import com.example.springSecurityJWT.dto.AuthenticationRequest;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class loginControllerTest {
 

@@ -14,3 +14,12 @@ create table auth (
     member_name varchar(15),
     auth varchar(10)
 );
+
+
+
+![](C:\Users\csimo\Downloads\springbootsecurity1.png)
+
+
+login 시도 -> authenticationManager 호출 
+->  userCustomDetailService 호출 후 override 된
+;loadUserByUsername 함수 실행 

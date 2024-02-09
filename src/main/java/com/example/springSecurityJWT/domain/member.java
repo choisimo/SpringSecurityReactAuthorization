@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 
+import java.util.List;
+
 @Entity
 @Data
 public class member {
@@ -18,6 +20,9 @@ public class member {
     private String memberName;
     private String regdate;
     private boolean enabled;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    List<auth> authList;
 
     @Builder
     public member(Long id, String memberPw, String memberName, String regdate, boolean enabled) {

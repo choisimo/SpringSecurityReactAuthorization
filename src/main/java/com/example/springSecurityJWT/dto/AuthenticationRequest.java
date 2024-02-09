@@ -1,4 +1,4 @@
-package com.example.springSecurityJWT.domain;
+package com.example.springSecurityJWT.dto;
 
 import lombok.Data;
 
