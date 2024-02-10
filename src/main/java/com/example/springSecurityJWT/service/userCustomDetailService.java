@@ -1,8 +1,9 @@
-package com.example.springSecurityJWT.security;
+package com.example.springSecurityJWT.service;
 
 import com.example.springSecurityJWT.domain.member;
-import com.example.springSecurityJWT.dto.customMember;
-import com.example.springSecurityJWT.service.memberService;
+import com.example.springSecurityJWT.dto.userCustomDetails;
+import com.example.springSecurityJWT.repository.memberRepository;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,15 +12,16 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
-
+/**
+* 사용자 이름을 받아서 사용자 인증 확인 (loadUserByUsername) 후,
+* 인증 확인된 사용자일 경우 -> UserDetails 를 상속 받는 useCustomDetails 를
+* return
+* */
 @Service
+@RequiredArgsConstructor
 public class userCustomDetailService implements UserDetailsService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
-    @Autowired
-    private memberService memberService;
+    private final memberRepository memberRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -28,16 +30,16 @@ public class userCustomDetailService implements UserDetailsService {
 
         member member = null;
         try {
-            member = memberService.login(username);
+            member = memberRepository.findByUsername(username);
         } catch (Exception e) {
             logger.info("일치 하는 사용자 없음!!");
             throw new RuntimeException(e);
         }
 
-        customMember customMember = new customMember(member);
+        userCustomDetails userCustomDetails = new userCustomDetails(member);
 
-        logger.info("customMember : " + customMember.toString());
+        logger.info("customMember : " + userCustomDetails.toString());
 
-        return customMember;
+        return userCustomDetails;
     }
 }

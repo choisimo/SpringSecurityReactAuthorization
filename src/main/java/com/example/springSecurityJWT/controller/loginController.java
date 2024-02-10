@@ -1,7 +1,11 @@
 package com.example.springSecurityJWT.controller;
 
 import com.example.springSecurityJWT.configuration.jwtUtils;
+import com.example.springSecurityJWT.domain.Role;
+import com.example.springSecurityJWT.domain.member;
 import com.example.springSecurityJWT.dto.AuthenticationRequest;
+import com.example.springSecurityJWT.dto.registerRequest;
+import com.example.springSecurityJWT.service.memberService;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -10,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -20,7 +23,7 @@ public class loginController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final jwtUtils jwtUtils;
-
+    private memberService memberService;
     @PostMapping("login")
     public ResponseEntity<?> login(@RequestBody AuthenticationRequest request) {
 
@@ -30,32 +33,20 @@ public class loginController {
         logger.info("request username : " + username);
         logger.info("request password : " + password);
 
-        List<String> roles = new ArrayList<>();
-        roles.add("ROLE_USER");
-        roles.add("ROLE_ADMIN");
-
-        // create Token
-        String jwt = jwtUtils.createToken(username, roles);
-
-        logger.info("create Token : " + jwt);
-
-        return new ResponseEntity<String>(jwt, HttpStatus.OK);
+        return new ResponseEntity<AuthenticationRequest>(memberService.login(request), HttpStatus.OK);
     }
 
-    @GetMapping("/token/info")
-    public ResponseEntity<?> tokenInfo(@RequestHeader(name = "Authorization") String header) {
-        Claims parsedToken = jwtUtils.tokenInfo(header);
 
-        if (parsedToken != null) {
-            String username = parsedToken.get("username", String.class);
-            List authorites = parsedToken.get("auth", List.class);
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody registerRequest request) throws Exception{
+        registerRequest regRequest = registerRequest.builder()
+                .username(request.getUsername())
+                .password(request.getPassword())
+                .role(Role.USER)
+                .build();
 
-            logger.info("username : " + username);
-            logger.info("authorites" + authorites);
+        member member = regRequest.toEntity();
 
-            return new ResponseEntity<String>(parsedToken.toString(), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("invalid or missing token", HttpStatus.UNAUTHORIZED);
-        }
+        return new ResponseEntity<Integer>(memberService.insert(member), HttpStatus.OK);
     }
 }

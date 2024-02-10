@@ -14,23 +14,26 @@ public class member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "member_password", length = 100)
-    private String memberPw;
-    @Column(name = "member_name", length = 15)
-    private String memberName;
+    @Column(length = 100)
+    private String password;
+    @Column(length = 15)
+    private String username;
     private String regdate;
     private boolean enabled;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-    List<auth> authList;
+    @Column
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
 
     @Builder
-    public member(Long id, String memberPw, String memberName, String regdate, boolean enabled) {
+    public member(Long id, String password, String username, String regdate, boolean enabled, Role role) {
         this.id = id;
-        this.memberPw = memberPw;
-        this.memberName = memberName;
+        this.password = password;
+        this.username = username;
         this.regdate = regdate;
         this.enabled = enabled;
+        this.role = role;
     }
 
     public member() {}

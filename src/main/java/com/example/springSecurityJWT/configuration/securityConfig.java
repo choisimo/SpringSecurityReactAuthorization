@@ -1,7 +1,9 @@
 package com.example.springSecurityJWT.configuration;
 
+import com.example.springSecurityJWT.repository.memberRepository;
 import com.example.springSecurityJWT.security.filter.jwtAuthenticationFilter;
-import com.example.springSecurityJWT.security.userCustomDetailService;
+import com.example.springSecurityJWT.security.filter.jwtRequestFilter;
+import com.example.springSecurityJWT.service.userCustomDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -12,7 +14,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -23,6 +24,7 @@ public class securityConfig {
     @Autowired
     private userCustomDetailService userCustomDetailService;
     private AuthenticationManager authenticationManager;
+    private memberRepository memberRepository;
 
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         // disable CSRF attack protection
@@ -41,8 +43,8 @@ public class securityConfig {
         // to use custom Authentication, set null
         http.userDetailsService(userCustomDetailService);
 
-        http.addFilterAt(new jwtAuthenticationFilter(authenticationManager), null)
-                .addFilterBefore(null, null);
+        http.addFilter(new jwtAuthenticationFilter(authenticationManager))
+                .addFilter(new jwtRequestFilter(authenticationManager,memberRepository));
 
         // set authorization
         http.authorizeHttpRequests(authorize ->
