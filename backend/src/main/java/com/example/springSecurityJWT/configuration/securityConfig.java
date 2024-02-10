@@ -16,6 +16,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
 
 @Configuration
 @EnableWebSecurity
@@ -25,7 +26,7 @@ public class securityConfig {
     private userCustomDetailService userCustomDetailService;
     private AuthenticationManager authenticationManager;
     private memberRepository memberRepository;
-
+    private CorsConfiguration corsConfiguration;
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         // disable CSRF attack protection
         http.csrf(AbstractHttpConfigurer::disable);
@@ -51,6 +52,7 @@ public class securityConfig {
                 authorize
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .requestMatchers("/").permitAll()
+                        .requestMatchers("/register").permitAll()
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
                         .anyRequest().authenticated()

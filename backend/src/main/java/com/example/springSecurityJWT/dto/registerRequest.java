@@ -23,8 +23,7 @@ public class registerRequest {
 
 
     @Builder
-    public registerRequest(Long id, String password, String username, String regdate, boolean enabled, Role role) {
-        this.id = id;
+    public registerRequest(String username, String password, String regdate, boolean enabled, Role role) {
         this.password = password;
         this.username = username;
         this.regdate = regdate;
