@@ -17,12 +17,21 @@ public class memberService {
     private AuthenticationManager authenticationManager;
 
     public int insert(member member) throws Exception {
-        String memberPw = member.getUsername();
+        String memberPw = member.getPassword();
+        String username = member.getUsername();
+
+        member checkMember = memberRepository.findByUsername(username);
+
+        if (checkMember != null) {
+            log.error("이미 존재하는 username 입니다!");
+            return 0;
+        }
+        log.info("memberService, register's member password : " + memberPw);
+        log.info("memberService, register's member username : " + username);
 
         member.setPassword(passwordEncoder.encode(memberPw));
 
         memberRepository.save(member);
-
         return 1;
     }
 }

@@ -20,10 +20,11 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-/**
-* Request 요청이 올 때 가장 먼저 실행되는 필터!!
-* -> OncePerRequestFilter 를 상속했기 때문!!
+/*
+*   Authorization filter!
+*   
 * */
+
 
 @Slf4j
 @Component
@@ -31,6 +32,7 @@ public class jwtRequestFilter extends BasicAuthenticationFilter {
 
     private jwtUtils jwtUtils;
     private final memberRepository memberRepository;
+
     public jwtRequestFilter(AuthenticationManager authenticationManager, memberRepository memberRepository) {
         super(authenticationManager);
         this.memberRepository = memberRepository;
@@ -44,6 +46,7 @@ public class jwtRequestFilter extends BasicAuthenticationFilter {
          * http header 에서 AUTHORIZATION 정보 가지고 오기
          * => token 유무 확인해서 로그인 체크
          * */
+        logger.info("jwtRequestFilter 작동!");
 
         String authorizationHeader = request.getHeader("Authorization");
         logger.info("JwtHeader : " + authorizationHeader);
@@ -69,8 +72,7 @@ public class jwtRequestFilter extends BasicAuthenticationFilter {
 
             // security session 에 authentication 저장!
             SecurityContextHolder.getContext().setAuthentication(authentication);
-
-            filterChain.doFilter(request, response);
         }
+        filterChain.doFilter(request, response);
     }
 }
