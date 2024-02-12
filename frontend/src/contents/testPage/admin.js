@@ -6,13 +6,16 @@ export function AdminPage() {
     useEffect(() => {
 
         const userToken = localStorage.getItem("userToken");
-        const headers = {
-            Authorization: `Bearer ${userToken}`,
-        };
+
 
         const fetchData = async () => {
             try {
-                const response = await axios.get("/admin/1", {headers});
+                const response = await axios.get("/admin/1", {
+                    headers: {
+                        Authorization: `${userToken}`,
+                        'Content-Type': 'application/json',
+                    },
+                });
                 if (response.status === 200) {
                     alert(response.data);
                 }

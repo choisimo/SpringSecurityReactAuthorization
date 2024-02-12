@@ -11,7 +11,8 @@ export function UserPage() {
             try {
                 const response = await axios.get("/user/1", {
                         headers: {
-                            userToken,
+                           Authorization: `Bearer ${userToken}`,
+                            'Content-Type': 'application/json',
                         },
                     });
                 if (response.status === 200) {

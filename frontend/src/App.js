@@ -11,8 +11,8 @@ function App() {
         <Routes>
           <Route exact path="/join" element={<Join/>}/>
           <Route exact path="/login" element={<Login/>}/>
-          <Route exact path="/user/1" element={<AdminPage/>}/>
-          <Route exact path="/admin/1" element={<UserPage/>}/>
+          <Route exact path="/admin/1" element={<AdminPage/>}/>
+          <Route exact path="/user/1" element={<UserPage/>}/>
         </Routes>
       </div>
   )
