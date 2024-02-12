@@ -30,6 +30,7 @@ public class jwtUtils {
     }
 
     public String createToken(String username, Collection< ? extends GrantedAuthority> role){
+        logger.info("createToken start!");
         Claims claims = Jwts.claims();
         claims.put("username", username);
         claims.put("role", role);
@@ -57,7 +58,7 @@ public class jwtUtils {
                     .parseClaimsJws(jwt)
                     .getBody();
         } else {
-            logger.error("jwtUtils tokenInfo's received token is null!" + header);
+            logger.error("received token is null!" + header);
             return null;
         }
     }

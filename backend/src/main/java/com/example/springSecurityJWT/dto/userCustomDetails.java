@@ -8,6 +8,7 @@ import com.example.springSecurityJWT.domain.member;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 @Slf4j
@@ -22,16 +23,21 @@ public class userCustomDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(member.getRole().name()));
+        log.info(List.of(new SimpleGrantedAuthority(member.getRole().name())).toString());
+        return Stream.of(new SimpleGrantedAuthority(member.getRole().name())).toList();
     }
 
     @Override
     public String getPassword() {
+        if (member.getPassword() != null){
+            log.info("userDetails password is exist");
+        }
         return member.getPassword();
     }
 
     @Override
     public String getUsername() {
+        log.info("userDetails username : " + member.getUsername());
         return member.getUsername();
     }
 

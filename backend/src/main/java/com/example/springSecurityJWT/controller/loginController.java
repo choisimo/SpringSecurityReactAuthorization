@@ -25,7 +25,7 @@ public class loginController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody registerRequest request) throws Exception{
-        log.info("front join request occured");
+        log.info("register controller start!");
 
         registerRequest regRequest = registerRequest.builder()
                 .username(request.getUsername())
@@ -42,8 +42,10 @@ public class loginController {
         log.info("register insert result : " + result);
 
         if (result == 1){
+            log.info("registration success!");
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
+            log.error("registration failed!");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }

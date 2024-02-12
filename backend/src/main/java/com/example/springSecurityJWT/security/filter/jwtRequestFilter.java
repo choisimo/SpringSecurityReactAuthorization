@@ -50,8 +50,8 @@ public class jwtRequestFilter extends BasicAuthenticationFilter {
          * */
 
         logger.info("jwtRequestFilter 작동!");
-
-        String authorizationHeader = request.getHeader("authorization");
+        logger.info("request : " + request);
+        String authorizationHeader = request.getHeader("Authorization");
         logger.info("JwtHeader : " + authorizationHeader);
 
         if(authorizationHeader != null) {
@@ -74,12 +74,15 @@ public class jwtRequestFilter extends BasicAuthenticationFilter {
             member member = memberRepository.findByUsername(username);
 
             userCustomDetails userCustomDetails = new userCustomDetails(member);
+            log.info("userCustomDetails 값 가지고 나옴!");
             // JWT authorization 정상일 경우 authentication 객체 생성!
             Authentication authentication = new UsernamePasswordAuthenticationToken
                     (userCustomDetails, null, userCustomDetails.getAuthorities());
-
+            log.info("authentication 객체 생성 완료!");
+            log.info(authentication.toString());
             // security session 에 authentication 저장!
             SecurityContextHolder.getContext().setAuthentication(authentication);
+            log.info("Security session 에 인증 정보 저장완료!!");
         } else {
             log.error("jwtUtils.tokenInfo failed!");
             filterChain.doFilter(request, response);

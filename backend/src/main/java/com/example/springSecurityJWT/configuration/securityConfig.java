@@ -63,6 +63,8 @@ public class securityConfig {
         // to use custom Authentication, set null
         http.userDetailsService(userCustomDetailService);
 
+        // custom filter 는 반드시!! Security Config 에 추가해주어야 함!!
+        // DI 필터내부에서 안되니 security 에서 직접 Dependencies provide 해주어야함!!
         // jwtAuthenticationFilter 객체 생성 시 authenticationManager 생성자에서 생성될 수 있도록!!
         http.addFilterAt(new jwtAuthenticationFilter(authenticationManager, jwtUtils, objectMapper())
                         , UsernamePasswordAuthenticationFilter.class)
@@ -73,11 +75,11 @@ public class securityConfig {
         http.authorizeHttpRequests(authorize ->
                 authorize
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                        .requestMatchers("/","/register","/login").permitAll()
                         .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                        .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .anyRequest().permitAll()
+                        .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/","/register","/login").permitAll()
+                        .anyRequest().authenticated()
         );
 
         http.formLogin(formLogin -> formLogin
@@ -100,6 +102,7 @@ public class securityConfig {
         return authenticationManager;
     }
 
+    // parsing JSON data
     @Bean
     public ObjectMapper objectMapper(){
         return new ObjectMapper();

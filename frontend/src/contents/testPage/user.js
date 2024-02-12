@@ -1,6 +1,6 @@
-import {useContext, useEffect, useState} from "react";
+import { useContext, useEffect } from "react";
 import axios from "axios";
-import {HttpHeadersContext} from "../context/HttpHeaderProvider";
+import { HttpHeadersContext } from "../context/HttpHeaderProvider";
 
 export function UserPage() {
     const userToken = localStorage.getItem("userToken");
@@ -8,12 +8,16 @@ export function UserPage() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get("/user/1", {
-                    headers: {
-                        "Content-Type": "application/json;charset=UTF-8",
-                        "Authorization": userToken,
-                    },
-                });
+                const response = await axios.post(
+                    "/user/1",
+                    null,
+                    {
+                        headers: {
+                            "Content-Type": "application/json;charset=UTF-8",
+                            "Authorization": userToken,
+                        },
+                    }
+                );
 
                 if (response && response.status === 200) {
                     console.log("/user/1 get data: ", response.data);

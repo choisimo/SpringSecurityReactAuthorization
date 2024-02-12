@@ -24,6 +24,8 @@ public class jwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     /**
      * 인증 시도 메소드 -> "/login" request filter
+     *  /login 호출시 UsernamePasswordAuthenticationFilter 낚아챔!!
+     *  -> username, password 받아주기!!
      */
 
     //사용자 인증을 위한 authenticationManager!
@@ -61,7 +63,6 @@ public class jwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         }
 
         log.info("username : " + authenticationRequest.getUsername());
-        log.info("password : " + authenticationRequest.getPassword());
 
         // 사용자 인증정보 토큰 생성
         UsernamePasswordAuthenticationToken authenticationToken
