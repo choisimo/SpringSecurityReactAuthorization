@@ -46,15 +46,18 @@ public class jwtUtils {
 
     // Parse and return JWT claims
     public Claims tokenInfo(String header){
-        logger.info(header);
+        logger.info("jwtUtils tokenInfo : " + header);
         if (header.startsWith("Bearer ")){
+            logger.info("Bearer starts");
             String jwt = header.split(" ")[1];
+            logger.info("jwt header split : " + jwt);
             return Jwts.parserBuilder()
                     .setSigningKey(key)
                     .build()
                     .parseClaimsJws(jwt)
                     .getBody();
         } else {
+            logger.error("jwtUtils tokenInfo's received token is null!" + header);
             return null;
         }
     }

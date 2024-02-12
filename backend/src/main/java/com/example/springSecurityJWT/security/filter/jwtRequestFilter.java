@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.net.URLDecoder;
 
 /*
 *   Authorization filter!
@@ -49,8 +50,12 @@ public class jwtRequestFilter extends BasicAuthenticationFilter {
          * */
         logger.info("jwtRequestFilter 작동!");
 
-        String authorizationHeader = request.getHeader("Authorization");
+        String authorizationHeader = request.getHeader("authorization");
         logger.info("JwtHeader : " + authorizationHeader);
+
+        if(authorizationHeader != null) {
+            logger.info("authorizationHeader is not null!");
+        }
 
         // AuthorizationHeader 에 정보가 없을 때
         if(authorizationHeader == null || !authorizationHeader.startsWith("Bearer")){
@@ -59,7 +64,12 @@ public class jwtRequestFilter extends BasicAuthenticationFilter {
             return;
         }
 
-        Claims jwtClaims = jwtUtils.tokenInfo(authorizationHeader);
+        String decodeHeader = URLDecoder.decode(authorizationHeader, "UTF-8");
+        logger.info("JwtHeader decoded : " + decodeHeader);
+        String AuthorizationHeader = request.getHeader(decodeHeader);
+        logger.info("AuthorizationHeader" + AuthorizationHeader);
+
+        Claims jwtClaims = jwtUtils.tokenInfo(AuthorizationHeader);
 
         if (jwtClaims != null) {
             String username = (String) jwtClaims.get("username");
@@ -73,7 +83,9 @@ public class jwtRequestFilter extends BasicAuthenticationFilter {
 
             // security session 에 authentication 저장!
             SecurityContextHolder.getContext().setAuthentication(authentication);
+        } else {
+            log.error("jwtUtils.tokenInfo failed!");
+            filterChain.doFilter(request, response);
         }
-        filterChain.doFilter(request, response);
     }
 }

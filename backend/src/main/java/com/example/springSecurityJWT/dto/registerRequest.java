@@ -34,5 +34,4 @@ public class registerRequest {
                 .role(role)
                 .build();
     }
-
 }
