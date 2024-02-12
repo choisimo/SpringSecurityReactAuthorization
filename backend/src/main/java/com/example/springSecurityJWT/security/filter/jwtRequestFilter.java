@@ -30,12 +30,13 @@ import java.io.IOException;
 @Component
 public class jwtRequestFilter extends BasicAuthenticationFilter {
 
-    private jwtUtils jwtUtils;
+    private final jwtUtils jwtUtils;
     private final memberRepository memberRepository;
 
-    public jwtRequestFilter(AuthenticationManager authenticationManager, memberRepository memberRepository) {
+    public jwtRequestFilter(AuthenticationManager authenticationManager, memberRepository memberRepository, jwtUtils jwtUtils) {
         super(authenticationManager);
         this.memberRepository = memberRepository;
+        this.jwtUtils = jwtUtils;
     }
 
     @Override

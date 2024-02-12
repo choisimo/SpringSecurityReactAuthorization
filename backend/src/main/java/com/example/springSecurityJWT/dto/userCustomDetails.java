@@ -1,5 +1,6 @@
 package com.example.springSecurityJWT.dto;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,11 +10,13 @@ import java.util.Collection;
 import java.util.List;
 
 
+@Slf4j
 public class userCustomDetails implements UserDetails {
 
     private member member;
 
     public userCustomDetails(member member) {
+        log.info("userCustomDetails 실행!");
         this.member = member;
     }
 

@@ -20,14 +20,21 @@ export function Login(){
     const setUserToken = (token) => {
         localStorage.setItem('userToken', token);
     }
-    const handleSubmit = async () => {
+    const handleSubmit = async (e) => {
+        e.preventDefault();
         const response = await axios.post("/login", {
             username: username,
             password: password,
         });
         if (response.status === 200) {
-            setUserToken(response.data);
-            alert('토큰 받음');
+            const token = response.headers;
+            if(token){
+                console.log(token);
+                setUserToken(response.headers);
+                alert("토큰 받음!");
+            } else {
+                console.log("토큰 없음!");
+            }
         } else {
             alert(response.status + "토큰 생성 실패");
         }

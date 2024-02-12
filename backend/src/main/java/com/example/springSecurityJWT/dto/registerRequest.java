@@ -17,17 +17,13 @@ public class registerRequest {
     private Long id;
     private String password;
     private String username;
-    private String regdate;
-    private boolean enabled;
     private Role role;
 
 
     @Builder
-    public registerRequest(String username, String password, String regdate, boolean enabled, Role role) {
+    public registerRequest(String username, String password, Role role) {
         this.password = password;
         this.username = username;
-        this.regdate = regdate;
-        this.enabled = enabled;
         this.role = role;
     }
 
@@ -35,8 +31,8 @@ public class registerRequest {
         return member.builder()
                 .username(username)
                 .password(password)
-                .regdate(LocalDateTime.now().toString())
-                .enabled(true)
+                .role(role)
                 .build();
     }
+
 }

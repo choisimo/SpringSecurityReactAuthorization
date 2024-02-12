@@ -1,7 +1,9 @@
 package com.example.springSecurityJWT.security.filter;
 
 import com.example.springSecurityJWT.configuration.jwtUtils;
+import com.example.springSecurityJWT.dto.AuthenticationRequest;
 import com.example.springSecurityJWT.dto.userCustomDetails;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,12 +29,14 @@ public class jwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     //사용자 인증을 위한 authenticationManager!
     private final AuthenticationManager authenticationManager;
 
-    private jwtUtils jwtUtils;
+    private final jwtUtils jwtUtils;
 
+    private final ObjectMapper objectMapper;
     // constructor
-    public jwtAuthenticationFilter(AuthenticationManager authenticationManager) {
+    public jwtAuthenticationFilter(AuthenticationManager authenticationManager, jwtUtils jwtUtils, ObjectMapper objectMapper) {
         this.authenticationManager = authenticationManager;
-        log.info("jwtAuthenticationFilter 작동!");
+        this.jwtUtils = jwtUtils;
+        this.objectMapper = objectMapper;
     }
 
     /**
@@ -48,12 +52,23 @@ public class jwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
-        log.info("username" + username);
-        log.info("password" + password);
+        AuthenticationRequest authenticationRequest;
+        try {
+            authenticationRequest = objectMapper.readValue(request.getInputStream(), AuthenticationRequest.class);
+        } catch (IOException e) {
+            log.error("JSON inputStream 실패!");
+            throw new RuntimeException(e);
+        }
+
+        log.info("username : " + authenticationRequest.getUsername());
+        log.info("password : " + authenticationRequest.getPassword());
 
         // 사용자 인증정보 토큰 생성
         UsernamePasswordAuthenticationToken authenticationToken
-                = new UsernamePasswordAuthenticationToken(username, password);
+                = new UsernamePasswordAuthenticationToken(
+                        authenticationRequest.getUsername(), authenticationRequest.getPassword());
+
+        log.info("사용자 인증 정보 토큰 생성 완료!");
 
         // 사용자 인증처리
         // authentication 함수 호출 시
@@ -89,6 +104,8 @@ public class jwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         String jwtToken = jwtUtils.createToken
                 (userCustomDetails.getUsername(), userCustomDetails.getAuthorities());
+
+        log.info("login generated Token : " + jwtToken);
 
         response.addHeader("Authorization", "Bearer " + jwtToken);
     }

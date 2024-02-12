@@ -26,7 +26,7 @@ public class userCustomDetailService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        logger.info("login loadUserByUsername" + username);
+        logger.info("login loadUserByUsername : " + username);
 
         member member = null;
         try {

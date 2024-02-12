@@ -19,7 +19,8 @@ export function Join() {
         }
     }
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (e) => {
+        e.preventDefault();
         const response = await axios.post("/register", {
             username: username,
             password: password,
