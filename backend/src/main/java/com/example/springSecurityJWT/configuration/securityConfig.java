@@ -31,6 +31,7 @@ public class securityConfig {
     @Autowired
     private userCustomDetailService userCustomDetailService;
     private AuthenticationManager authenticationManager;
+    @Autowired
     private memberRepository memberRepository;
     @Autowired
     private jwtUtils jwtUtils;
@@ -72,10 +73,7 @@ public class securityConfig {
         http.authorizeHttpRequests(authorize ->
                 authorize
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                        .requestMatchers("/").permitAll()
-                        .requestMatchers("/register").permitAll()
-                        .requestMatchers("/login").permitAll()
-                        .requestMatchers("/home").permitAll()
+                        .requestMatchers("/","/register","/login").permitAll()
                         .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                         .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
@@ -98,7 +96,6 @@ public class securityConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
         throws Exception {
-        log.info("AuthenticationManager Bean");
         this.authenticationManager = authenticationConfiguration.getAuthenticationManager();
         return authenticationManager;
     }

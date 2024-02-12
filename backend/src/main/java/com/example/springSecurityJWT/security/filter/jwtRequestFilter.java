@@ -48,6 +48,7 @@ public class jwtRequestFilter extends BasicAuthenticationFilter {
          * http header 에서 AUTHORIZATION 정보 가지고 오기
          * => token 유무 확인해서 로그인 체크
          * */
+
         logger.info("jwtRequestFilter 작동!");
 
         String authorizationHeader = request.getHeader("authorization");
@@ -64,13 +65,9 @@ public class jwtRequestFilter extends BasicAuthenticationFilter {
             return;
         }
 
-        String decodeHeader = URLDecoder.decode(authorizationHeader, "UTF-8");
-        logger.info("JwtHeader decoded : " + decodeHeader);
-        String AuthorizationHeader = request.getHeader(decodeHeader);
-        logger.info("AuthorizationHeader" + AuthorizationHeader);
+        Claims jwtClaims = jwtUtils.tokenInfo(authorizationHeader);
 
-        Claims jwtClaims = jwtUtils.tokenInfo(AuthorizationHeader);
-
+        logger.info("jwtClaims : " + jwtClaims);
         if (jwtClaims != null) {
             String username = (String) jwtClaims.get("username");
             logger.info("jwtClaims username : " + username);

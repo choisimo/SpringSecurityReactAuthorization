@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 @Getter
 public class registerRequest {
 
-    private Long id;
     private String password;
     private String username;
     private Role role;

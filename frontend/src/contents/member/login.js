@@ -29,8 +29,9 @@ export function Login(){
         if (response.status === 200) {
             const token = response.headers;
             if(token){
-                console.log(token);
-                setUserToken(response.headers);
+                console.log("response.headers : " , token);
+                console.log("response.headers.get(Authorization) : ", response.headers.get("Authorization"));
+                setUserToken(response.headers.get("Authorization"));
                 alert("토큰 받음!");
             } else {
                 console.log("토큰 없음!");
