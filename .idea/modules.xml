@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/securityReact.iml" filepath="$PROJECT_DIR$/.idea/securityReact.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/springSecurityJWT.main.iml" filepath="$PROJECT_DIR$/.idea/modules/springSecurityJWT.main.iml" />
     </modules>
   </component>
 </project>

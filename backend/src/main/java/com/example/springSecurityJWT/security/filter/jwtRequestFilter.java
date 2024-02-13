@@ -20,6 +20,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.net.URLDecoder;
+import java.util.Objects;
 
 /*
 *   Authorization filter!
@@ -28,14 +29,11 @@ import java.net.URLDecoder;
 
 
 @Slf4j
-@Component
-public class jwtRequestFilter extends BasicAuthenticationFilter {
+public class jwtRequestFilter extends OncePerRequestFilter  {
 
     private final jwtUtils jwtUtils;
     private final memberRepository memberRepository;
-
-    public jwtRequestFilter(AuthenticationManager authenticationManager, memberRepository memberRepository, jwtUtils jwtUtils) {
-        super(authenticationManager);
+    public jwtRequestFilter(memberRepository memberRepository, jwtUtils jwtUtils) {
         this.memberRepository = memberRepository;
         this.jwtUtils = jwtUtils;
     }
@@ -65,7 +63,7 @@ public class jwtRequestFilter extends BasicAuthenticationFilter {
             return;
         }
 
-        Claims jwtClaims = jwtUtils.tokenInfo(authorizationHeader);
+        Claims jwtClaims = jwtUtils.tokenInfo(Objects.requireNonNull(authorizationHeader));
 
         logger.info("jwtClaims : " + jwtClaims);
         if (jwtClaims != null) {
@@ -75,18 +73,16 @@ public class jwtRequestFilter extends BasicAuthenticationFilter {
 
             userCustomDetails userCustomDetails = new userCustomDetails(member);
             log.info("userCustomDetails 값 가지고 나옴!");
+            log.info("userCustomDetails.getAuthorites : " + userCustomDetails.getAuthorities());
             // JWT authorization 정상일 경우 authentication 객체 생성!
             Authentication authentication = new UsernamePasswordAuthenticationToken
                     (userCustomDetails, null, userCustomDetails.getAuthorities());
             log.info("authentication 객체 생성 완료!");
             log.info(authentication.toString());
             // security session 에 authentication 저장!
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            log.info("Security session 에 인증 정보 저장완료!!");
-
-        } else {
-            log.error("jwtUtils.tokenInfo failed!");
-            filterChain.doFilter(request, response);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                log.info("Security session 에 인증 정보 저장완료!!");
         }
+            filterChain.doFilter(request, response);
     }
 }

@@ -18,8 +18,11 @@ public class registerRequest {
     private String username;
     private Role role;
 
+    public registerRequest()
+    {}
 
     @Builder
+
     public registerRequest(String username, String password, Role role) {
         this.password = password;
         this.username = username;

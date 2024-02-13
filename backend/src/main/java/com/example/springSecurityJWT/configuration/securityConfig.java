@@ -40,6 +40,14 @@ public class securityConfig {
     private CorsConfigurationSource corsConfigurationSource;
 
 
+    // AuthenticationManager
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
+            throws Exception {
+        this.authenticationManager = authenticationConfiguration.getAuthenticationManager();
+        return authenticationManager;
+    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
@@ -68,10 +76,11 @@ public class securityConfig {
         // DI 필터내부에서 안되니 security 에서 직접 Dependencies provide 해주어야함!!
         // jwtAuthenticationFilter 객체 생성 시 authenticationManager 생성자에서 생성될 수 있도록!!
         http.addFilterAt(new jwtAuthenticationFilter(authenticationManager, jwtUtils, objectMapper())
-                        , UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new jwtRequestFilter(authenticationManager,memberRepository, jwtUtils)
-                        , UsernamePasswordAuthenticationFilter.class);
+                , UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new jwtRequestFilter(memberRepository, jwtUtils)
+        , UsernamePasswordAuthenticationFilter.class);
 
+        log.info("authorizeHttpRequests start");
         // set authorization
         http.authorizeHttpRequests(authorize ->
                 authorize
@@ -82,10 +91,13 @@ public class securityConfig {
                         .requestMatchers("/register","/login").permitAll()
                         .anyRequest().authenticated()
         );
+        log.info("authorizeHttpRequests end");
 
         http.formLogin(formLogin -> formLogin
                 .loginPage("/login")
                 .defaultSuccessUrl("/"));
+
+
         return http.build();
     }
 
@@ -93,14 +105,6 @@ public class securityConfig {
     @Bean
     public BCryptPasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
-    }
-
-    // AuthenticationManager
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
-        throws Exception {
-        this.authenticationManager = authenticationConfiguration.getAuthenticationManager();
-        return authenticationManager;
     }
 
     // parsing JSON data
