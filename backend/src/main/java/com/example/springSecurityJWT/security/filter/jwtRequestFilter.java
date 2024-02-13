@@ -83,6 +83,7 @@ public class jwtRequestFilter extends BasicAuthenticationFilter {
             // security session 에 authentication 저장!
             SecurityContextHolder.getContext().setAuthentication(authentication);
             log.info("Security session 에 인증 정보 저장완료!!");
+
         } else {
             log.error("jwtUtils.tokenInfo failed!");
             filterChain.doFilter(request, response);

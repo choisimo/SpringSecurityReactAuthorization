@@ -109,5 +109,6 @@ public class jwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         log.info("login generated Token : " + jwtToken);
 
         response.addHeader("Authorization", "Bearer " + jwtToken);
+        response.setStatus(200);
     }
 }

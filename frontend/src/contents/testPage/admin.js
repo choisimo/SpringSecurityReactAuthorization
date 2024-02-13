@@ -10,7 +10,7 @@ export function AdminPage() {
 
         const fetchData = async () => {
             try {
-                const response = await axios.get("/admin/1", {
+                const response = await axios.get("/admin/1",{
                     headers: {
                         Authorization: `${userToken}`,
                         'Content-Type': 'application/json',

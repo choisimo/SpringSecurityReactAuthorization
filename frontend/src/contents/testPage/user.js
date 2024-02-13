@@ -8,9 +8,8 @@ export function UserPage() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.post(
+                const response = await axios.get(
                     "/user/1",
-                    null,
                     {
                         headers: {
                             "Content-Type": "application/json;charset=UTF-8",
