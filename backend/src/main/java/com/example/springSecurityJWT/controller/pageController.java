@@ -16,7 +16,7 @@ public class pageController {
         return "admin page 1";
     }
 
-    @GetMapping("/user/1")
+    @PostMapping("/user/1")
     public String userPage(){
         log.info("user page controller");
         return "user page 1";

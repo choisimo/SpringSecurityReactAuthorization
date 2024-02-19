@@ -40,14 +40,6 @@ public class securityConfig {
     private CorsConfigurationSource corsConfigurationSource;
 
 
-    // AuthenticationManager
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
-            throws Exception {
-        this.authenticationManager = authenticationConfiguration.getAuthenticationManager();
-        return authenticationManager;
-    }
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
@@ -77,7 +69,7 @@ public class securityConfig {
         // jwtAuthenticationFilter 객체 생성 시 authenticationManager 생성자에서 생성될 수 있도록!!
         http.addFilterAt(new jwtAuthenticationFilter(authenticationManager, jwtUtils, objectMapper())
                 , UsernamePasswordAuthenticationFilter.class);
-        http.addFilterBefore(new jwtRequestFilter(memberRepository, jwtUtils)
+        http.addFilterAt(new jwtRequestFilter(memberRepository, jwtUtils)
         , UsernamePasswordAuthenticationFilter.class);
 
         log.info("authorizeHttpRequests start");
@@ -85,7 +77,6 @@ public class securityConfig {
         http.authorizeHttpRequests(authorize ->
                 authorize
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                        //.requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/register","/login").permitAll()
@@ -105,6 +96,12 @@ public class securityConfig {
     @Bean
     public BCryptPasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
+    }
+
+    // AuthenticationManager
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
     }
 
     // parsing JSON data

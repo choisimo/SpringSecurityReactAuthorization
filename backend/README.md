@@ -18,7 +18,7 @@ create table auth (
 
 ![](C:\Users\csimo\Downloads\security.png)
 
-
+//https://lealea.tistory.com/144
 1. 로그인 페이지에서 username + password 를 Http Request 로 인증 요청한다
 2. 기본적으로 "/login" 요청을 받으면 AuthenticationFilter 가 해당 request 를 가로챈다
 // attemptAuthentication 실행

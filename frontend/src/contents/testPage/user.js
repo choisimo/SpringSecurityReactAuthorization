@@ -6,9 +6,10 @@ export function UserPage() {
     const userToken = localStorage.getItem("userToken");
 
     useEffect(() => {
+        console.log("useEffect /user/1 running!");
         const fetchData = async () => {
             try {
-                const response = await axios.get(
+                const response = await axios.post(
                     "/user/1",
                     {
                         headers: {
@@ -28,6 +29,7 @@ export function UserPage() {
                 console.error("user page axios failed!:", error);
             }
         };
+        console.log("UserPage rendered!");
 
         fetchData();
     }, []);

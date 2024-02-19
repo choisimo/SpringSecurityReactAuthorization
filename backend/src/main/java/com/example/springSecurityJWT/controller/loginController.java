@@ -56,10 +56,12 @@ public class loginController {
         }
     }
 
+/*
     @PostMapping("/login")
     public void login(@RequestBody AuthenticationRequest request) {
         log.info("login controller");
     }
+*/
 
     @PostMapping("/home")
     @ResponseBody
