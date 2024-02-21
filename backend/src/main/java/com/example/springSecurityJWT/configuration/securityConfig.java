@@ -5,6 +5,7 @@ import com.example.springSecurityJWT.security.filter.jwtAuthenticationFilter;
 import com.example.springSecurityJWT.security.filter.jwtRequestFilter;
 import com.example.springSecurityJWT.service.userCustomDetailService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -27,6 +28,7 @@ import org.springframework.web.cors.CorsUtils;
 @Slf4j
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class securityConfig {
 
     @Autowired
@@ -38,6 +40,7 @@ public class securityConfig {
     private jwtUtils jwtUtils;
     @Autowired
     private CorsConfigurationSource corsConfigurationSource;
+    private final AuthenticationConfiguration authenticationConfiguration;
 
 
     @Bean
@@ -100,7 +103,7 @@ public class securityConfig {
 
     // AuthenticationManager
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+    public AuthenticationManager authenticationManager() throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
