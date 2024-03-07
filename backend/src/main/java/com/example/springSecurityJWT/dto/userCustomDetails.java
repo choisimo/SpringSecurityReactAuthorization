@@ -23,7 +23,6 @@ public class userCustomDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        log.info(List.of(new SimpleGrantedAuthority(member.getRole().name())).toString());
         return Stream.of(new SimpleGrantedAuthority(member.getRole().name())).toList();
     }
 

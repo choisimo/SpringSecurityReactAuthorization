@@ -51,9 +51,6 @@ public class jwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         log.info("jwtAuthenticationFilter 작동!");
 
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-
         AuthenticationRequest authenticationRequest;
         try {
             authenticationRequest = objectMapper.readValue(request.getInputStream(), AuthenticationRequest.class);

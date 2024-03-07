@@ -6,6 +6,7 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +20,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Component
 public class jwtUtils {
 
@@ -60,6 +62,14 @@ public class jwtUtils {
         } else {
             logger.error("received token is null!" + header);
             return null;
+        }
+    }
+
+    public UsernamePasswordAuthenticationToken getAuthentication(String jwt) {
+        try {
+            Jws<Claims>
+        } catch (Exception e) {
+            log.error("authentication 과정에서 error 발생 : " + e.getMessage());
         }
     }
 }
